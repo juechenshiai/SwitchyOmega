@@ -62,7 +62,10 @@ module.exports = exports =
 
   pacResult: (proxy) ->
     if proxy
-      "#{exports.pacProtocols[proxy.scheme]} #{proxy.host}:#{proxy.port}"
+      if proxy.scheme == 'socks5'
+        "SOCKS5 #{proxy.host}:#{proxy.port}; SOCKS #{proxy.host}:#{proxy.port}"
+      else
+        "#{exports.pacProtocols[proxy.scheme]} #{proxy.host}:#{proxy.port}"
     else
       'DIRECT'
 
@@ -105,6 +108,8 @@ module.exports = exports =
 
   updateUrl: (profile) ->
     exports._handler(profile).updateUrl?.call(exports, profile)
+  updateContentTypeHints: (profile) ->
+    exports._handler(profile).updateContentTypeHints?.call(exports, profile)
   update: (profile, data) ->
     exports._handler(profile).update.call(exports, profile, data)
 
@@ -134,6 +139,8 @@ module.exports = exports =
       result = analyze?.call(exports, profile)
       cache.analyzed = result
     return cache
+  dropCache: (profile) ->
+    exports._profileCache.drop profile
   directReferenceSet: (profile) ->
     return {} if not exports.isInclusive(profile)
     cache = exports._profileCache.get profile, {}
@@ -232,18 +239,38 @@ module.exports = exports =
     'FixedProfile':
       includable: true
       create: (profile) ->
-        profile.bypassList ?= [{
-          conditionType: 'BypassCondition'
-          pattern: '<local>'
-        }]
+        profile.bypassList ?= [
+          {
+            conditionType: 'BypassCondition'
+            pattern: '127.0.0.1'
+          }
+          {
+            conditionType: 'BypassCondition'
+            pattern: '[::1]'
+          }
+          {
+            conditionType: 'BypassCondition'
+            pattern: 'localhost'
+          }
+        ]
       match: (profile, request) ->
         if profile.bypassList
           for cond in profile.bypassList
             if Conditions.match(cond, request)
-              return [@pacResult(), cond]
+              return [@pacResult(), cond, {scheme: 'direct'}, undefined]
         for s in @schemes when s.scheme == request.scheme and profile[s.prop]
-          return [@pacResult(profile[s.prop]), s.scheme]
-        return [@pacResult(profile.fallbackProxy), '']
+          return [
+            @pacResult(profile[s.prop]),
+            s.scheme,
+            profile[s.prop],
+            profile.auth?[s.prop] ? profile.auth?['all']
+          ]
+        return [
+          @pacResult(profile.fallbackProxy),
+          '',
+          profile.fallbackProxy,
+          profile.auth?.fallbackProxy ? profile.auth?['all']
+        ]
       compile: (profile) ->
         if ((not profile.bypassList or not profile.fallbackProxy) and
             not profile.proxyForHttp and not profile.proxyForHttps and
@@ -309,8 +336,17 @@ module.exports = exports =
           new U2.AST_Dot property: 'call', expression: new U2.AST_Function(
             argnames: []
             body: [
+              # https://github.com/FelisCatus/SwitchyOmega/issues/390
+              # 1. Add \n after PAC to terminate line comment in PAC (// ...)
+              # 2. Add another \n with knowledge that the first can be escaped
+              #    by trailing backslash in PAC. (// ... \)
+              # 3. Add a multiline-comment block /* ... */ to terminate any
+              #    potential unclosed multiline-comment block. (/* ...)
+              # 4. And finally, a semicolon to terminate the final statement.
+              # Wait a moment. Do we really need to go this far? I don't know.
+
               # TODO(catus): Remove the hack needed to insert raw code.
-              new AST_Raw ';\n' + profile.pacScript + ';'
+              new AST_Raw ';\n' + profile.pacScript + '\n\n/* End of PAC */;'
               new U2.AST_Return value:
                 new U2.AST_SymbolRef name: 'FindProxyForURL'
             ]
@@ -320,6 +356,12 @@ module.exports = exports =
           undefined
         else
           profile.pacUrl
+      updateContentTypeHints: -> [
+        '!text/html'
+        '!application/xhtml+xml'
+        'application/x-ns-proxy-autoconfig'
+        'application/x-javascript-config'
+      ]
       update: (profile, data) ->
         return false if profile.pacScript == data
         profile.pacScript = data
@@ -387,6 +429,9 @@ module.exports = exports =
         profile.matchProfileName ?= 'direct'
         profile.ruleList ?= ''
       directReferenceSet: (profile) ->
+        if profile.ruleList?
+          refs = RuleList[profile.format]?.directReferenceSet?(profile)
+          return refs if refs
         refs = {}
         for name in [profile.matchProfileName, profile.defaultProfileName]
           refs[exports.nameAsKey(name)] = name
@@ -405,7 +450,7 @@ module.exports = exports =
         formatHandler = RuleList[format]
         if not formatHandler
           throw new Error "Unsupported rule list format #{format}!"
-        ruleList = profile.ruleList
+        ruleList = profile.ruleList?.trim() || ''
         if formatHandler.preprocess?
           ruleList = formatHandler.preprocess(ruleList)
         return formatHandler.parse(ruleList, profile.matchProfileName,
@@ -415,7 +460,14 @@ module.exports = exports =
       compile: (profile) ->
         exports.compile(profile, 'SwitchProfile')
       updateUrl: (profile) -> profile.sourceUrl
+      updateContentTypeHints: -> [
+        '!text/html'
+        '!application/xhtml+xml'
+        'text/plain'
+        '*'
+      ]
       update: (profile, data) ->
+        data = data.trim()
         original = profile.format ? exports.formatByType[profile.profileType]
         profile.profileType = 'RuleListProfile'
         format = original

@@ -27,7 +27,7 @@ describe 'Profiles', ->
           chai.assert.equal(matchResult.source, expected.source)
         else
           chai.assert.deepEqual(matchResult, expected)
-      catch
+      catch _
         printResult = JSON.stringify(matchResult)
         msg = ("expect profile to return #{JSON.stringify(expected)} " +
                 "instead of #{printResult} for request #{o_request}")
@@ -46,6 +46,10 @@ describe 'Profiles', ->
     it 'should return a valid PAC result for a proxy', ->
       proxy = {scheme: "http", host: "127.0.0.1", port: 8888}
       Profiles.pacResult(proxy).should.equal("PROXY 127.0.0.1:8888")
+    it 'should return special compatible result for SOCKS5', ->
+      proxy = {scheme: "socks5", host: "127.0.0.1", port: 8888}
+      compatibleResult = "SOCKS5 127.0.0.1:8888; SOCKS 127.0.0.1:8888"
+      Profiles.pacResult(proxy).should.equal(compatibleResult)
   describe '#byName', ->
     it 'should get profiles from builtin profiles', ->
       profile = Profiles.byName('direct')
@@ -93,22 +97,34 @@ describe 'Profiles', ->
         conditionType: 'BypassCondition'
         pattern: '<local>'
       }]
+      proxyForHttp:
+        scheme: 'socks4'
+        host: '127.0.0.1'
+        port: 1234
       proxyForHttps:
         scheme: 'http'
         host: '127.0.0.1'
-        port: 1234
+        port: 2345
       fallbackProxy:
-        scheme: 'socks5'
+        scheme: 'socks4'
         host: '127.0.0.1'
-        port: 1234
+        port: 3456
+      auth:
+        proxyForHttps:
+          username: 'test'
+          password: 'cheesecake'
     it 'should use protocol-specific proxies if suitable', ->
-      testProfile(profile, 'https://www.example.com/',
-        ['PROXY 127.0.0.1:1234', 'https'])
+      testProfile(profile, 'https://www.example.com/', ['PROXY 127.0.0.1:2345',
+        'https', profile.proxyForHttps, profile.auth.proxyForHttps])
     it 'should use fallback proxies for other protocols', ->
       testProfile(profile, 'ftp://www.example.com/',
-        ['SOCKS5 127.0.0.1:1234', ''])
+        ['SOCKS 127.0.0.1:3456', '', profile.fallbackProxy, undefined])
+    it 'should not return authentication if not provided for protocol', ->
+      testProfile(profile, 'http://www.example.com/',
+        ['SOCKS 127.0.0.1:1234', 'http', profile.proxyForHttp, undefined])
     it 'should not use any proxy for requests matching the bypassList', ->
-      testProfile profile, 'ftp://localhost/', ['DIRECT', profile.bypassList[0]]
+      testProfile profile, 'ftp://localhost/',
+        ['DIRECT', profile.bypassList[0], {scheme: 'direct'}, undefined]
   describe 'PacProfile', ->
     profile = Profiles.create('test', 'PacProfile')
     profile.pacScript = '''
@@ -119,12 +135,25 @@ describe 'Profiles', ->
     it 'should return the result of the pac script', ->
       testProfile(profile, 'ftp://www.example.com:9999/abc', null,
         'PROXY www.example.com:8080')
+    it 'should not fail for PAC with trailing comments', ->
+      p = Profiles.create('test', 'PacProfile')
+      p.pacScript = profile.pacScript + '''
+        // This is a trailing line comment.
+      '''
+      testProfile(p, 'ftp://www.example.com:9999/abc', null,
+        'PROXY www.example.com:8080')
+      p = Profiles.create('test', 'PacProfile')
+      p.pacScript = profile.pacScript + '''
+        /* This is a multiline comment which is not properly closed.
+      '''
+      testProfile(p, 'ftp://www.example.com:9999/abc', null,
+        'PROXY www.example.com:8080')
     it 'should return includable for non-file pacUrl', ->
       Profiles.isIncludable(profile).should.be.true
     it 'should return not includable for file: pacUrl', ->
-      profile = Profiles.create('test', 'PacProfile')
-      profile.pacUrl = 'file:///proxy.pac'
-      Profiles.isIncludable(profile).should.be.false
+      p = Profiles.create('test', 'PacProfile')
+      p.pacUrl = 'file:///proxy.pac'
+      Profiles.isIncludable(p).should.be.false
   describe 'SwitchProfile', ->
     profile = Profiles.create('test', 'SwitchProfile')
     profile.rules = [
@@ -179,6 +208,18 @@ describe 'Profiles', ->
         '+example': 'example'
         '+abc': 'abc'
       )
+    it 'should clear the reference cache if explicitly requested', ->
+      profile.revision = 'a'
+      set = Profiles.directReferenceSet(profile)
+      # Remove 'default' from references.
+      profile.defaultProfileName = 'abc'
+      Profiles.dropCache(profile)
+      newSet = Profiles.directReferenceSet(profile)
+      newSet.should.eql(
+        '+company': 'company'
+        '+example': 'example'
+        '+abc': 'abc'
+      )
   describe 'VirtualProfile', ->
     profile = Profiles.create('test', 'VirtualProfile')
     profile.defaultProfileName = 'default'
@@ -197,6 +238,24 @@ describe 'Profiles', ->
         '+example': 'example'
         '+default': 'default'
       )
+    it 'should calulate referenced profiles for rule list with results', ->
+      set = Profiles.directReferenceSet({
+        profileType: 'RuleListProfile'
+        format: 'Switchy'
+        matchProfileName: 'ignored'
+        defaultProfileName: 'alsoIgnored'
+        ruleList: '''
+          [SwitchyOmega Conditions]
+          @with result
+          !*.example.org
+          *.example.com +ABC
+          * +DEF
+        '''
+      })
+      set.should.eql(
+        '+ABC': 'ABC'
+        '+DEF': 'DEF'
+      )
     it 'should match requests based on the rule list', ->
       testProfile(profile, 'http://localhost/example.com',
         ruleListResult('example', 'example.com'))
@@ -207,6 +266,14 @@ describe 'Profiles', ->
       testProfile(profile, 'http://localhost/example.com', ['+default', null])
       testProfile(profile, 'http://localhost/example.org',
         ruleListResult('example', 'example.org'))
+    it 'should not fail when ruleList is not provided', ->
+      p =
+        profileType: 'RuleListProfile'
+        format: 'Switchy'
+        matchProfileName: 'match'
+        defaultProfileName: 'default'
+      Profiles.directReferenceSet(p).should.be.an 'object'
+      testProfile(p, 'http://localhost/example.com', ['+default', null])
     it 'should switch to AutoProxy format on update if detected', ->
       profile = Profiles.create('test2', 'RuleListProfile')
       profile.format = 'Switchy'

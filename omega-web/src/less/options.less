@@ -9,6 +9,10 @@
   max-width: 600px;
 }
 
+textarea.width-limit {
+  max-width: 80%;
+}
+
 .width-limit-lg {
   max-width: 800px;
 }
@@ -206,6 +210,19 @@ ul.list-style-none, li.list-style-none {
 
 /* body */
 
+html {
+  height: 100%;
+}
+
+body {
+  min-height: 100%;
+}
+
+.modal-backdrop {
+  position: fixed;
+  bottom: 0;
+}
+
 h1 {
   color: #5c6166;
   font-size: 1.7em;
@@ -229,6 +246,13 @@ h1 {
       padding: 8px 15px;
       @media (max-height: 767px) {
         padding: 5px 15px;
+      }
+
+      &.btn-success:hover {
+        // Fix hover style of [Apply changes] when highlighted.
+        color: #fff;
+        background-color: #449d44;
+        border-color: #398439;
       }
     }
   }
@@ -353,6 +377,24 @@ main {
   }
 }
 
+@media (min-width: 768px) {
+  // Try to workaround the issue where dropdown menus in the table are clipped.
+  // .table-responsive sets overflow-x, which causes the issue. Just setting
+  // overflow-y: visible will NOT work. Scrolling must be disabled for X & Y.
+  // See: http://stackoverflow.com/a/6433475
+  .table-responsive {
+    overflow: visible;
+  }
+}
+
+@media (max-width: 767px) {
+  // Try to make sure that the dropdown fits in the table-responsive scroll box.
+  // It effectively inlines the whole dropdown menu. Ugly, but at least working.
+  .table-responsive .dropdown-menu {
+    position: static !important;
+  }
+}
+
 .fixed-servers,
 .switch-rules {
   td {
@@ -386,7 +428,11 @@ main {
 
 .switch-attached {
   > tr > td {
-    background-color: #F9F9F9;
+    background-color: #f9f9f9;
+
+    .shepherd-active & {
+      background-color: transparent;
+    }
 
     &:first-child {
       text-align: center;
@@ -423,6 +469,19 @@ main {
   width: 1em;
   text-align: center;
   cursor: move;
+}
+
+.switch-rule-row td.has-icon {
+  > .form-control {
+    display: inline-block;
+    width: ~"calc(100% - 1.5em)";
+  }
+
+  > .icon-wrapper {
+    display: block;
+    float: right;
+    line-height: 34px;
+  }
 }
 
 .cycle-profile-container {

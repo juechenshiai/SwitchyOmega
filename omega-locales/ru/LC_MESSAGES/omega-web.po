@@ -1,0 +1,1306 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Russian (SwitchyOmega)\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-11-21 02:34+0200\n"
+"PO-Revision-Date: 2018-12-28 12:09+0000\n"
+"Last-Translator: Nikita Y. <Yug_nik@mail.ru>\n"
+"Language-Team: Russian <https://hosted.weblate.org/projects/switchyomega/"
+"main/ru/>\n"
+"Language: ru\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<="
+"4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Generator: Weblate 3.4-dev\n"
+
+msgid "appNameShort"
+msgstr "SwitchyOmega"
+
+msgid "manifest_app_name"
+msgstr "Proxy SwitchyOmega"
+
+msgid "manifest_app_description"
+msgstr "Управляйте и переключайтесь между множеством прокси быстро и легко."
+
+msgid "manifest_icon_default_title"
+msgstr "Загрузка…"
+
+msgid "upgrade_profile_auto"
+msgstr "Автопереключение"
+
+msgid "profile_direct"
+msgstr "[Напрямую]"
+
+msgid "profile_system"
+msgstr "[Системный прокси]"
+
+msgid "condition_HostWildcardCondition"
+msgstr "Шаблон хоста"
+
+msgid "condition_help_HostWildcardCondition"
+msgstr ""
+"Сопоставляет хосты (доменные имена) с шаблоном.<br><b>Звёздочка "
+"<code>*</code></b> сопоставляет нуль или более символов.<br><b>Знак вопроса "
+"<code>?</code></b> сопоставляет ровно один символ.<br><br>Обратите внимания, "
+"что правила, начинающиеся с <code>*.</code> обрабатываются особо только в "
+"шаблонах хоста.<br>Пример: <code>*.example.com</code> сопоставит как "
+"www.example.com, <b>ТАК И example.com.</b><br>Для того, чтобы сопоставить "
+"<b>только</b> поддомены, используйте <b>две</b> звёздочки: "
+"<code>**.example.com</code>."
+
+msgid "condition_HostRegexCondition"
+msgstr "Регулярное выражение хоста"
+
+msgid "condition_help_HostRegexCondition"
+msgstr ""
+"Подобно шаблону хоста, но сопоставляет хосты (доменные имена) с <a "
+"href='https://www.google.ru/search?q=регулярные%20выражения'>регулярным "
+"выражением</a>.<br>Регулярные выражения бывает трудно построить (и "
+"читать).<br>Поэтому регулярные выражения рекомендуется использовать только "
+"для тех условий, что не могут быть выражены другими методами."
+
+msgid "condition_HostLevelsCondition"
+msgstr "Уровни хоста"
+
+msgid "condition_help_HostLevelsCondition"
+msgstr ""
+"Matches the request if and only if the host level in within the given range."
+"<br>Host level is defined as the <b>number of dot-separated segments</b> of "
+"the host (domain name).<br>Example: <code>www.example.com</code> is with a "
+"host level of 3, while <code>internal</code> is of host level 1."
+
+msgid "condition_IpCondition"
+msgstr "IP литералы"
+
+msgid "condition_help_IpCondition"
+msgstr ""
+"Matches the request if and only if the host is a <b>literal</b> IP address and"
+" in the subnet as specified by <a href='"
+"https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing#CIDR_notation'>"
+"CIDR notation</a>.<br>For example, given the rule <code>127.0.0.1/16</code>, "
+"it matches all IP addresses like <code>127.0.*.*</code>.<br>"
+"So <code>127.0.0.1</code> matches while <code>127.1.0.0</code> does not. "
+"Host names like <code>localhost</code> will never match because they are "
+"<b>not</b> IP literals."
+
+msgid "condition_UrlWildcardCondition"
+msgstr "Шаблон URL"
+
+msgid "condition_help_UrlWildcardCondition"
+msgstr ""
+"Matches URLs of the request by wildcard.<br>See the Host wildcard section "
+"above for a quick wildcard reference.<br>Note that URL wildcards are not "
+"specially treated (no subdomain magic as in Host wildcard).<br>So <code>*://"
+"*.example.com/*</code> matches http://www.example.com/ but <b>does not</b> "
+"match http://example.com/."
+
+msgid "condition_UrlRegexCondition"
+msgstr "Регулярное выражение URL"
+
+msgid "condition_help_UrlRegexCondition"
+msgstr ""
+"Matches URL by extremely powerful <a href='https://www.google.com/search?"
+"q=regular%20expression'>regular expression</a>.<br>However, regular "
+"expressions can be hard to construct (and read).<br>It is recommended to use "
+"wildcards for most cases and only use regex for conditions that cannot be "
+"achieved by any other condition type."
+
+msgid "condition_KeywordCondition"
+msgstr "Ключевое слово"
+
+msgid "condition_help_KeywordCondition"
+msgstr ""
+"A keyword condition matches if the URL protocol is HTTP, and the pattern is "
+"an exact sub-string of the URL.<br>It behaves like the URL wildcard pattern "
+"<code>http://*<b>pattern</b>*</code>, where <b>pattern</b> is the keyword "
+"pattern.<br>Keyword conditions are useful if you want to bypass a firewall "
+"blocking some keywords in the URL, by requesting such URLs through a proxy."
+
+msgid "condition_FalseCondition"
+msgstr "(Отключено)"
+
+msgid "condition_details_FalseCondition"
+msgstr "(Условие игнорируется при сопоставлении)"
+
+msgid "condition_help_FalseCondition"
+msgstr ""
+"You can disable a condition by setting its type to <code>(Disabled)</code>. "
+"A Disabled condition act as if it does not exist.<br>This feature can be "
+"used to disable conditions temporarily.<br>Disabled conditions still hold "
+"the previous information (like patterns) and can be re-enabled by setting "
+"the condition type back to the previous type."
+
+msgid "condition_TimeCondition"
+msgstr "Текущее время"
+
+msgid "condition_help_TimeCondition"
+msgstr ""
+"Matches if the current local time is in the range defined by "
+"<b>starting hour</b> and <b>ending hour</b>, both inclusive.<br>"
+"Local time, starting hour and ending hour are all calculated in "
+"<b>24-hour</b> format (from <b>0 to 23</b>). <br>"
+"The calculation happens roughly at the moment when the request is sent."
+
+msgid "condition_WeekdayCondition"
+msgstr "День недели"
+
+msgid "condition_help_WeekdayCondition"
+msgstr ""
+"Matches if the <b>current day of week</b> is selected in condition details. "
+"Day is calculated according to local timezone.<br>"
+"The request and its URL don't matter to this condition. "
+"The result is solely based on the day of the week when the request is sent."
+
+msgid "condition_alert_fullUrlLimitation"
+msgstr ""
+"Full URL matching is no longer possible for <code>https://</code> "
+"URLs as of Chrome 52. "
+"<a href='https://github.com/FelisCatus/SwitchyOmega/wiki/Chromium-Full-URL-Limitation'>"
+"Learn more...</a>"
+
+msgid "condition_alert_fullUrlLimitationLink"
+msgstr "https://github.com/FelisCatus/SwitchyOmega/wiki/Chromium-Full-URL-Limitation"
+
+msgid "condition_group_default"
+msgstr " "
+
+msgid "condition_group_host"
+msgstr "Хост"
+
+msgid "condition_group_url"
+msgstr "Url"
+
+msgid "condition_group_special"
+msgstr "Особые"
+
+msgid "ruleListFormat_Switchy"
+msgstr "Switchy"
+
+msgid "ruleListFormat_AutoProxy"
+msgstr "Авто-прокси"
+
+msgid "ruleList_usageUrl"
+msgstr "https://github.com/FelisCatus/SwitchyOmega/wiki/RuleListUsage"
+
+msgid "ruleList_error_resultNotEnabled"
+msgstr "Отсутствует директива '@with result'!"
+
+msgid "ruleList_error_unknownProfile"
+msgstr "Неизвестный профиль: $PROFILE$"
+
+msgid "ruleList_error_missingResultProfile"
+msgstr "Missing result profile name at Line $LNO$: $SOURCE$"
+
+msgid "ruleList_error_invalidRule"
+msgstr "Некорректное правило на строке $LNO$: $SOURCE$"
+
+msgid "ruleList_error_noDefaultRule"
+msgstr "Missing default rule with catch-all '*' condition!"
+
+msgid "dialog_close"
+msgstr "Закрыть"
+
+msgid "dialog_save"
+msgstr "Сохранить изменения"
+
+msgid "dialog_ok"
+msgstr "ОК"
+
+msgid "dialog_cancel"
+msgstr "Отмена"
+
+msgid "inputClear_clear"
+msgstr "Очистить"
+
+msgid "inputClear_restore"
+msgstr "Восстановить"
+
+msgid "options_title"
+msgstr "Параметры SwitchyOmega"
+
+msgid "options_experimental_badge"
+msgstr "α"
+
+msgid "options_navHeader_setting"
+msgstr "Настройки"
+
+msgid "options_navHeader_profiles"
+msgstr "Профили"
+
+msgid "options_navHeader_actions"
+msgstr "Действия"
+
+msgid "options_tab_ui"
+msgstr "Интерфейс"
+
+msgid "options_tab_general"
+msgstr "Основные"
+
+msgid "options_tab_importExport"
+msgstr "Импорт и экспорт"
+
+msgid "options_newProfile"
+msgstr "Новый профиль…"
+
+msgid "options_apply"
+msgstr "Применить изменения"
+
+msgid "options_discard"
+msgstr "Отклонить изменения"
+
+msgid "options_reset"
+msgstr "Сбросить параметры"
+
+msgid "options_group_miscOptions"
+msgstr "Прочие настройки"
+
+msgid "options_confirmDeletion"
+msgstr "Подтвердите удаление условия."
+
+msgid "options_refreshOnProfileChange"
+msgstr "Обновить текущую вкладку при изменении профиля."
+
+msgid "options_showInspectMenu"
+msgstr "Allow inspecting proxy used for page elements via context menu."
+
+msgid "options_addConditionsToBottom"
+msgstr "Put new conditions added using the popup to the bottom of the list."
+
+msgid "options_group_keyboardShortcut"
+msgstr "Горячая клавиша"
+
+msgid "options_menuShortcutHelp"
+msgstr ""
+"Pressing the shortcut will open the switch popup menu. (Defaults to Alt+Shift"
+"+O)."
+
+msgid "options_menuShortcutMore"
+msgstr ""
+"The items in the popup menu can also be accessed using the keyboard. Press ? "
+"(or /) in the menu to learn more."
+
+msgid "options_menuShortcutConfigure"
+msgstr "Настроить горячую клавишу"
+
+msgid "options_group_switchOptions"
+msgstr "Настройки переключения"
+
+msgid "options_startupProfile"
+msgstr "Стартовый профиль"
+
+msgid "options_startupProfile_none"
+msgstr "(Текущий профиль)"
+
+msgid "options_showConditionTypesAdvanced"
+msgstr "Показывать продвинутые типы условий"
+
+msgid "options_showConditionTypesAdvancedHelp"
+msgstr ""
+"Разблокирует новые типы передовых, но сложных условий переключения. Для "
+"большинства сценариев основных типов условий должно быть достаточно, поэтому "
+"этот параметр не рекомендуется."
+
+msgid "options_quickSwitch"
+msgstr "Быстрое переключение"
+
+msgid "options_cycledProfiles"
+msgstr "Круговые профили"
+
+msgid "options_cycledProfilesHelp"
+msgstr ""
+"When you click on the icon (or use the shortcut above), the following "
+"profiles will be applied in their order."
+
+msgid "options_cycledProfilesTooFew"
+msgstr ""
+"You need to select at least 2 profiles to enable this function! You can drag "
+"them from the box below."
+
+msgid "options_notCycledProfiles"
+msgstr "Не круговые профили"
+
+msgid "options_group_proxyChanges"
+msgstr "Изменения прокси"
+
+msgid "options_revertProxyChanges"
+msgstr "Обращать изменения прокси, совершённые другими приложениями."
+
+msgid "options_group_conflicts"
+msgstr "Конфликты"
+
+msgid "options_conflicts_introduction"
+msgstr ""
+"Sometimes, other apps will also try to control the proxy settings, resulting "
+"in conflicts. Note that ad blockers and other extensions may also use proxy "
+"settings under the hood. Such conflicts cannot be avoided due to how the "
+"browser works."
+
+msgid "options_conflicts_lowerPriority"
+msgstr ""
+"A red badge like this on the SwitchyOmega icon indicates that another app has "
+"higher priority so SwitchyOmega cannot control the settings. Please try to "
+"uninstall SwitchyOmega and reinstall, which should raise SwitchyOmega's "
+"priority. If you still see conflicts after reinstallation, please consider "
+"removing the other app causing the conflict."
+
+msgid "options_conflicts_higherPriority"
+msgstr ""
+"If SwitchyOmega has higher priority, you can give the control back to other "
+"apps or system settings by selecting $SYSTEMPROFILE$ in the popup menu."
+
+msgid "options_showExternalProfile"
+msgstr ""
+"Показывать плавающее меню для импорта настроек проски из других приложений."
+
+msgid "options_showExternalProfileHelp"
+msgstr ""
+"When $SYSTEMPROFILE$ is selected, you can import the effective proxy settings "
+"from other apps by selecting $EXTERNALPROFILE$ on the popup menu. "
+"The settings will be imported as a profile using the name you provide. "
+"Please note that the imported profile is a snapshot and will not reflect "
+"any changes from the source app thereafter."
+
+msgid "options_group_networkRequests"
+msgstr "Сетевые запросы"
+
+msgid "options_monitorWebRequests"
+msgstr "Показывать счётчик неудавшихся веб-запросов на текущей вкладке."
+
+msgid "options_monitorWebRequestsHelp"
+msgstr ""
+"A yellow badge will be displayed on the icon if some resources fail to load,"
+"<br>and you can set the profile for such resources conveniently via the "
+"popup menu."
+
+msgid "options_downloadOptions"
+msgstr "Параметры скачивания"
+
+msgid "options_downloadOptionsHelp"
+msgstr "Configure the update frequency of online rule lists and PAC scripts."
+
+msgid "options_downloadInterval"
+msgstr "Интервал скачивания"
+
+msgid "options_downloadInterval_15"
+msgstr "15 минут"
+
+msgid "options_downloadInterval_60"
+msgstr "1 час"
+
+msgid "options_downloadInterval_180"
+msgstr "3 часа"
+
+msgid "options_downloadInterval_360"
+msgstr "6 часов"
+
+msgid "options_downloadInterval_720"
+msgstr "12 часов"
+
+msgid "options_downloadInterval_1440"
+msgstr "Каждый день"
+
+msgid "options_downloadInterval_never"
+msgstr "Никогда"
+
+msgid "options_group_importExportProfile"
+msgstr "Профиль"
+
+msgid "options_exportPacFile"
+msgstr "Экспортировать как файл PAC"
+
+msgid "options_exportPacFileHelp"
+msgstr ""
+"Export the current profile as a PAC file, so you can use it in other "
+"browsers."
+
+msgid "options_exportProfileHelp"
+msgstr ""
+"Чтобы экспортировать профиль, используйте панель действий в верхнем правом "
+"углу страници профиля."
+
+msgid "options_exportLegacyRuleList"
+msgstr ""
+"Export rule lists using Proxy Switchy!/SwitchyPlus/SwitchySharp compatible "
+"format when possible."
+
+msgid "options_exportLegacyRuleListHelp"
+msgstr ""
+"Enable this option only if you publish rule lists for users of those "
+"projects.<br>Please consider advising your audience to upgrade to "
+"SwitchyOmega for the improvements."
+
+msgid "options_group_importExportSettings"
+msgstr "Настройки"
+
+msgid "options_makeBackup"
+msgstr "Создать резевную копию"
+
+msgid "options_makeBackupHelp"
+msgstr ""
+"Make a full backup of your options (including profiles and all other "
+"options)."
+
+msgid "options_restoreLocal"
+msgstr "Восстановить из файла"
+
+msgid "options_restoreLocalHelp"
+msgstr "Восстановить параметры SwitchyOmega из локального файла."
+
+msgid "options_restoreOnline"
+msgstr "Восстановить из онлайна"
+
+msgid "options_restoreOnlinePlaceholder"
+msgstr "URL файла параметров (например, 'http://example.com/switchy.bak')"
+
+msgid "options_restoreOnlineSubmit"
+msgstr "Восстановить"
+
+msgid "options_group_syncing"
+msgstr "Синхронизация (экспериментально)"
+
+msgid "options_syncEnable"
+msgstr "Включить синхронизацию"
+
+msgid "options_syncEnableForce"
+msgstr "Скачать из синхронизации"
+
+msgid "options_syncDisable"
+msgstr "Отключить синхронизацию"
+
+msgid "options_syncReset"
+msgstr "Очистить удалённую копию"
+
+msgid "options_syncPristineHelp"
+msgstr ""
+"You can now automatically synchronize your settings and profiles across all "
+"your desktop devices running Chrome browser."
+
+msgid "options_syncSyncAlert"
+msgstr ""
+"Ваши настройки автоматически синхронизируются с другими вашими устройствами."
+
+msgid "options_syncSyncHelp"
+msgstr ""
+"Please note that you must sign in to Chrome on each of your devices "
+"(including this one) for the syncing to actually work. <br> You may check "
+"this section on other devices to ensure that it is working."
+
+msgid "options_syncConflictAlert"
+msgstr ""
+"Вы выгрузили копию ваших параметров на другое устройство с помощью "
+"синхронизации."
+
+msgid "options_syncConflictHelp"
+msgstr ""
+"You may download the remote copy to your device if you like. <br>However, "
+"doing so would <b>overwrite your existing settings and profiles</b> on this "
+"device."
+
+msgid "options_syncUnsupportedHelp"
+msgstr ""
+"Options syncing is not supported on your platform or browser. For now, only "
+"Chrome browser on desktop is supported."
+
+msgid "options_profileSyncDisabled"
+msgstr "Синхронизация отключена для этого профиля."
+
+msgid "options_profileSyncDisabled_quotaPerItem"
+msgstr ""
+"Синхронизация отключена для этого профиля, так как занимает слишком много "
+"пространства хранилища."
+
+msgid "options_profileTabPrefix"
+msgstr "Профиль :: "
+
+msgid "options_renameProfile"
+msgstr "Переименовать"
+
+msgid "options_deleteProfile"
+msgstr "Удалить"
+
+msgid "options_profileExportRuleList"
+msgstr "Опубликовать список правил"
+
+msgid "options_profileExportRuleListHelp"
+msgstr "Экспортировать правила переключения в текстовом формате для публикации."
+
+msgid "options_profileExportPac"
+msgstr "Экспортировать PAC"
+
+msgid "options_profileUnsupported"
+msgstr "Тип профиля $TYPE$ не поддерживается!"
+
+msgid "options_profileUnsupportedHelp"
+msgstr "Возможно, параметр испорчен, возможно, он из новой версии программы."
+
+msgid "options_profileEditSource"
+msgstr "Редактировать исходный код"
+
+msgid "options_profileEditSourceHelp"
+msgstr "Показывать справка по формату исходного кода"
+
+msgid "options_profileEditSourceHelpUrl"
+msgstr ""
+"https://github.com/FelisCatus/SwitchyOmega/wiki/SwitchyOmega-conditions-"
+"format#result-profile"
+
+msgid "options_group_proxyServers"
+msgstr "Прокси серверы"
+
+msgid "options_proxy_scheme"
+msgstr "Схема"
+
+msgid "options_proxy_protocol"
+msgstr "Протокол"
+
+msgid "options_proxy_server"
+msgstr "Сервер"
+
+msgid "options_proxy_port"
+msgstr "Порт"
+
+msgid "options_proxy_auth"
+msgstr "Аутентификация"
+
+msgid "options_proxy_authNotSupported"
+msgstr "Your browser DOES NOT support $PROTOCOLDISP$ proxy authentication! "
+"Please do not report this issue to SwitchyOmega. Contact the support for "
+"your browser instead."
+
+msgid "options_proxy_authAllWarningPac"
+msgstr ""
+"Warning: The username/password may be sent to unexpected servers returned by "
+"the PAC script."
+
+msgid "options_proxy_authAllWarningPacUrl"
+msgstr ""
+"Please make sure that you trust the script provided via the URL above before "
+"entering sensitive credentials."
+
+msgid "options_proxy_authAllWarningPacScript"
+msgstr ""
+"Please make sure that you trust the script below before providing sensitive "
+"credentials."
+
+msgid "options_proxy_authReferencedWarning"
+msgstr ""
+"Additionally, using this profile in other profiles (e.g. Switch Profile) may "
+"cause the username/password to be sent to proxy servers configured in other "
+"profiles."
+
+msgid "options_scheme_default"
+msgstr "(по-умолчанию)"
+
+msgid "options_protocol_direct"
+msgstr "НАПРЯМУЮ"
+
+msgid "options_protocol_useDefault"
+msgstr "(настройки по-умолчанию)"
+
+msgid "options_proxy_single"
+msgstr "Использовать прокси выше для всех протоколов."
+
+msgid "options_proxy_expand"
+msgstr "Показывать продвинутые"
+
+msgid "options_group_bypassList"
+msgstr "Список исключений"
+
+msgid "options_bypassListHelp"
+msgstr ""
+"Servers for which you do not want to use any proxy: (One server on each "
+"line.)"
+
+msgid "options_bypassListHelpLinkText"
+msgstr "(Доступны шаблоны и прочее…)"
+
+msgid "options_group_pacUrl"
+msgstr "PAC URL"
+
+msgid "options_pacUrlHelp"
+msgstr ""
+"The PAC script will be updated from this URL. If it is left blank, the "
+"following script will be used directly instead."
+
+msgid "options_pacUrlFile"
+msgstr ""
+"PAC profiles with file: URLs can only be applied directly. They cannot be "
+"used as result profiles because local files cannot be accessed due to "
+"browser limitation."
+
+msgid "options_pacUrlFileDisabled"
+msgstr ""
+"Therefore, you cannot use local PAC file for this profile. You can create a "
+"new PAC profile for that if you really want that."
+
+msgid "options_group_pacScript"
+msgstr "Скрипт PAC"
+
+msgid "options_pacScriptLastUpdate"
+msgstr "Скрипт PAC скачен $TIME$:"
+
+msgid "options_pacScriptObsolete"
+msgstr ""
+"PAC script is obsolete due to URL change. Press the download button above to "
+"update."
+
+msgid "options_group_virtualProfile"
+msgstr "Виртуальный профиль"
+
+msgid "options_virtualProfileTarget"
+msgstr "Цель"
+
+msgid "options_virtualProfileTargetHelp"
+msgstr ""
+"When this profile is applied, it acts exactly the same as the profile "
+"selected below."
+
+msgid "options_group_virtualProfileReplace"
+msgstr "Перенести в виртуальный профиль"
+
+msgid "options_virtualProfileReplace"
+msgstr "Заменить профиль цели"
+
+msgid "options_virtualProfileReplaceHelp"
+msgstr ""
+"You can migrate existing options to use this virtual profile instead of "
+"$PROFILE$. Doing so will update all existing rules concerning $PROFILE$ and "
+"point them to this virtual profile, so that their result profile can be "
+"controlled here."
+
+msgid "options_group_ruleListConfig"
+msgstr "Конфигурация списка правил"
+
+msgid "options_ruleListFormat"
+msgstr "Формат списка правил"
+
+msgid "options_group_ruleListResult"
+msgstr "Итоговые профили списка правил"
+
+msgid "options_ruleListMatchProfile"
+msgstr "Сопоставить профиль"
+
+msgid "options_ruleListDefaultProfile"
+msgstr "Профиль по-умолчанию"
+
+msgid "options_group_ruleListUrl"
+msgstr "URL списка правил"
+
+msgid "options_ruleListUrlHelp"
+msgstr ""
+"The rule list will be updated from this URL. If it is left blank, the "
+"following text will be parsed instead."
+
+msgid "options_group_ruleListText"
+msgstr "Текст списка правил"
+
+msgid "options_ruleListLastUpdate"
+msgstr "Список правил скачен $TIME$:"
+
+msgid "options_ruleListObsolete"
+msgstr ""
+"Rule list is obsolete due to URL change. Press the download button above to "
+"update."
+
+msgid "options_group_switchRules"
+msgstr "Правила переключения"
+
+msgid "options_sort"
+msgstr "Упорядочить"
+
+msgid "options_conditionType"
+msgstr "Тип условия"
+
+msgid "options_showConditionTypeHelp"
+msgstr "Показать справку"
+
+msgid "options_conditionDetails"
+msgstr "Детали условия"
+
+msgid "options_resultProfile"
+msgstr "Профиль"
+
+msgid "options_conditionActions"
+msgstr "Действия"
+
+msgid "options_addCondition"
+msgstr "Добавить условие"
+
+msgid "options_cloneRule"
+msgstr "Клонировать"
+
+msgid "options_ruleNote"
+msgstr "Заметка"
+
+msgid "options_switchAttachedProfileInCondition"
+msgstr "Правила списка правил"
+
+msgid "options_switchAttachedProfileInConditionDetails"
+msgstr "(Любой запрос соответствующий списку правил ниже)"
+
+msgid "options_switchAttachedProfileInConditionDisabled"
+msgstr "(Правила списка правил ОТКЛЮЧЕНЫ)"
+
+msgid "options_switchDefaultProfile"
+msgstr "По-умолчанию"
+
+msgid "options_hostLevelsBetween"
+msgstr "≤ уровни хоста ≤"
+
+msgid "options_hourBetween"
+msgstr "≤ текущий час ≤"
+
+msgid "options_weekDayShort_0"
+msgstr "Вс"
+
+msgid "options_weekDayShort_1"
+msgstr "Пн"
+
+msgid "options_weekDayShort_2"
+msgstr "Вт"
+
+msgid "options_weekDayShort_3"
+msgstr "Ср"
+
+msgid "options_weekDayShort_4"
+msgstr "Чт"
+
+msgid "options_weekDayShort_5"
+msgstr "Пт"
+
+msgid "options_weekDayShort_6"
+msgstr "Сб"
+
+msgid "options_group_conditionHelp"
+msgstr "О типах условий"
+
+msgid "options_group_attachProfile"
+msgstr "Импортировать онлайн список правил"
+
+msgid "options_attachProfile"
+msgstr "Добавить список правил"
+
+msgid "options_attachProfileHelp"
+msgstr ""
+"You can reuse an online collection of conditions published by others by "
+"adding a rule list."
+
+msgid "options_modalHeader_welcome"
+msgstr "Добро пожаловать в SwitchyOmega"
+
+msgid "options_welcomeNormal"
+msgstr ""
+"You have successfully installed SwitchyOmega, the ultimate proxy switcher."
+
+msgid "options_welcomeNormalGuide"
+msgstr ""
+"Please tell SwitchyOmega about your proxies through the options page. Let's "
+"see how."
+
+msgid "options_welcomeUpgrade"
+msgstr ""
+"You have successfully upgraded to SwitchyOmega. Don't panic, your existing "
+"options are fully preserved."
+
+msgid "options_welcomeUpgradeGuide"
+msgstr "Давайте пройдём небольшой гайд по новой странице параметров."
+
+msgid "options_guideNext"
+msgstr "Далее"
+
+msgid "options_guideDone"
+msgstr "Готово"
+
+msgid "options_guideSkip"
+msgstr "Пропустить гайд"
+
+msgid "options_modalHeader_applyOptions"
+msgstr "Применить параметры"
+
+msgid "options_optionsNotSaved"
+msgstr ""
+"Your modifications to the options have not been saved and will be lost if "
+"you proceed!"
+
+msgid "options_applyOptionsRequired"
+msgstr "Изменения параметров нужно применить перед тем, как продолжить."
+
+msgid "options_applyOptionsConfirm"
+msgstr "Хотите сохранить и применить параметры?"
+
+msgid "options_modalHeader_renameProfile"
+msgstr "Переименовать профиль"
+
+msgid "options_renameProfileName"
+msgstr "Новое имя профиля"
+
+msgid "options_profileNameConflict"
+msgstr "Профиль с данным именем уже существует."
+
+msgid "options_profileNameReserved"
+msgstr "Профили, начинающиеся с двойного подчёркивания, зарезервированны."
+
+msgid "options_profileNameHidden"
+msgstr ""
+"Profiles with names starting with underscore will be hidden on the popup "
+"menu. However, they can still be used in places like switch profile results."
+
+msgid "options_modalHeader_replaceProfile"
+msgstr "Заменить профиль"
+
+msgid "options_replaceProfile"
+msgstr "Заменить профиль"
+
+msgid "options_replaceProfileConfirm"
+msgstr "Вы действительно хотите заменить $FromProfile$ на $ToProfile$?"
+
+msgid "options_replaceProfileHelp"
+msgstr ""
+"If you proceed, all rules pointing to $FromProfile$ will be updated to use "
+"$ToProfile$ instead. Other options, such as startup profile and Quick Switch "
+"will also be modified as appropriate. However, the two profile themselves "
+"will NOT be changed or deleted."
+
+msgid "options_replaceProfileSuccess"
+msgstr "Параметры обновлены."
+
+msgid "options_modalHeader_deleteProfile"
+msgstr "Удалить профиль"
+
+msgid "options_deleteProfileConfirm"
+msgstr "Вы действительно хотите удалить следующий профиль?"
+
+msgid "options_modalHeader_cannotDeleteProfile"
+msgstr "Невозможно удалить профиль"
+
+msgid "options_profileReferredBy"
+msgstr ""
+"This profile cannot be deleted because it is referred by the following "
+"profiles:"
+
+msgid "options_modifyReferringProfiles"
+msgstr ""
+"You must modify these profiles and make them stop referring to this profile "
+"before you can delete it."
+
+msgid "options_profileNameEmpty"
+msgstr "Имя профиля не может быть пусто."
+
+msgid "popup_title"
+msgstr "SwitchyOmega Popup"
+
+msgid "options_modalHeader_proxyAuth"
+msgstr "Аутентификация прокси"
+
+msgid "options_proxyAuthUsername"
+msgstr "Имя пользователя"
+
+msgid "options_proxyAuthPassword"
+msgstr "Пароль"
+
+msgid "options_proxyAuthShowPassword"
+msgstr "Show password"
+
+msgid "options_proxyAuthHidePassword"
+msgstr "Hide password"
+
+msgid "options_proxyAuthNone"
+msgstr "Без аутентификации"
+
+msgid "options_modalHeader_deleteRule"
+msgstr "Удалить правило"
+
+msgid "options_deleteRuleConfirm"
+msgstr "Вы действительно хотите удалить следующее правило?"
+
+msgid "options_deleteRule"
+msgstr "Удалить"
+
+msgid "options_modalHeader_resetRules"
+msgstr "Сбросить правила"
+
+msgid "options_resetRulesConfirm"
+msgstr ""
+"Are you sure to set the result profile of ALL rules to the following profile?"
+
+msgid "options_resetRules"
+msgstr "Сбросить правила"
+
+msgid "options_resetRules_help"
+msgstr "Установить профиль для всех правил"
+
+msgid "options_modalHeader_deleteAttached"
+msgstr "Удалить список правил"
+
+msgid "options_deleteAttachedConfirm"
+msgstr "Вы действительно хотите удалить список правил из текущего профиля?"
+
+msgid "options_ruleListLineCount"
+msgstr "$COUNT$ строк правил"
+
+msgid "options_deleteAttached"
+msgstr "Удалить список правил"
+
+msgid "options_modalHeader_newProfile"
+msgstr "Новый профиль"
+
+msgid "options_newProfileName"
+msgstr "Имя профиля"
+
+msgid "options_profileType"
+msgstr "Пожалуйста, выберете тип профиля:"
+
+msgid "options_profileTypeFixedProfile"
+msgstr "Профиль прокси"
+
+msgid "options_profileDescFixedProfile"
+msgstr "Туннелирует трафик сквозь прокси серверы."
+
+msgid "options_profileTypePacProfile"
+msgstr "Профиль PAC"
+
+msgid "options_profileDescPacProfile"
+msgstr "Выбирает профиль, используя онлайн или локальный скрипт PAC."
+
+msgid "options_profileDescMorePacProfile"
+msgstr ""
+"You will only need this if you have a PAC script or a URL to it. Don't try "
+"to create one unless you have knowledge about PAC."
+
+msgid "options_profileTypeSwitchProfile"
+msgstr "Профиль-переключатель"
+
+msgid "options_profileDescSwitchProfile"
+msgstr ""
+"Applying different profiles automatically on various conditions such as "
+"domains or patterns.\n"
+" You can also import rules published online for easier switching. (Replaces "
+"AutoSwitch mode + Rule List.)"
+
+msgid "options_profileTypeRuleListProfile"
+msgstr "Профиль списка правил"
+
+msgid "options_profileDescRuleListProfile"
+msgstr "Использует онлайн набор условий, опубликованных другими пользователями."
+
+msgid "options_profileTypeVirtualProfile"
+msgstr "Виртуальный профиль"
+
+msgid "options_profileDescVirtualProfile"
+msgstr ""
+"A virtual profile can act as any of the other profiles on demand. It works "
+"well with SwitchProfile, allowing you to change the result of multiple "
+"conditions by one click."
+
+msgid "options_createProfile"
+msgstr "Создать"
+
+msgid "options_modalHeader_resetOptions"
+msgstr "Сбросить параметры"
+
+msgid "options_resetOptionsConfirm"
+msgstr ""
+"Do you really want to reset the options? All profiles and settings will be "
+"LOST!"
+
+msgid "options_formInvalid"
+msgstr "Пожалуйста, исправьте ошибки на этой странице."
+
+msgid "options_profileNotFound"
+msgstr "Профиль $PROFILE$ не существует! Параметры могут быть неверны."
+
+msgid "options_resetSuccess"
+msgstr "Сброос параметров."
+
+msgid "options_saveSuccess"
+msgstr "Параметры сохранены."
+
+msgid "options_importSuccess"
+msgstr "Параметры импортированны."
+
+msgid "options_importFormatError"
+msgstr "Некорректная резервная копия!"
+
+msgid "options_importDownloadError"
+msgstr "Ошибка при скачивании резервной копии!"
+
+msgid "options_profileDownloadSuccess"
+msgstr "Профиль успешно обновлён."
+
+msgid "options_profileDownloadError"
+msgstr "Ошибка при скачивании данных профиля!"
+
+msgid "options_profileDownloadError_NetworkError"
+msgstr "При обновлении произошла сетевая ошибка."
+
+msgid "options_profileDownloadError_HttpError"
+msgstr "При обновлении произошла ошибка HTTP ($STATUS$)."
+
+msgid "options_profileDownloadError_HttpNotFoundError"
+msgstr "URL профиля не найден на сервере. Пожалуйста, перепроверьте."
+
+msgid "options_profileDownloadError_HttpServerError"
+msgstr "При обновлении, удалённый сервер ответил ошибкой ($STATUS$)."
+
+msgid "options_profileDownloadError_ContentTypeRejectedError"
+msgstr "The downloaded data is invalid! "
+"You may open the Profile URL in your browser to inspect it."
+
+msgid "options_downloadProfileNow"
+msgstr "Скачать профиль сейчас"
+
+msgid "options_guide_fixedProfileStep"
+msgstr ""
+"A <b>Proxy Profile</b> contains settings like server ip &amp; port for proxy."
+"<br>Profiles are the the basic configuration units in SwitchyOmega.<br>We "
+"have already created an example profile for you. Try opening it."
+
+msgid "options_guide_fixedServersStep"
+msgstr ""
+"You can fill in your proxy server and port here as you like.<br>SwitchyOmega "
+"<b>does not come with any proxy servers</b>.<br>Please consult your network "
+"provider or proxy software manual if you don't know what should be filled in "
+"here."
+
+msgid "options_guide_autoSwitchProfileStep"
+msgstr ""
+"You can tell SwitchyOmega to switch between proxies automatically through "
+"the mighty <b>Switch Profile</b>.<br>However, its features cannot be covered "
+"in this quick guide.<br>You can open this profile to unlock its power some "
+"time later."
+
+msgid "options_guide_addMoreProfilesStep"
+msgstr ""
+"Need more profiles? You can always add more <b>Proxy, Switch and other "
+"profiles</b><br>for all your proxying needs.<br>Enjoy proxying!"
+
+msgid "options_guide_conditionStep"
+msgstr ""
+"SwitchyOmega can apply different profiles to requests based on "
+"<b>conditions</b>.<br> For example, the <b>Host wildcard</b> condition "
+"allows you to set the profile for all URLs in a domain."
+
+msgid "options_guide_conditionTypeStep"
+msgstr ""
+"You can use various condition types to match the host or full URL. <br> "
+"Click on the question mark to open the type reference."
+
+msgid "options_guide_conditionProfileStep"
+msgstr ""
+"SwitchyOmega applies the selected profile here to <b>any request matching "
+"the condition.</b> <br> The special <b>\"[Direct]\" profile</b> will cause "
+"the request to be sent without any proxy."
+
+msgid "options_guide_switchDefaultStep"
+msgstr ""
+"If no condition applies to some request, the \"Default\" profile will be "
+"used. <br>Conditions are always considered <b>from top to bottom</b> in "
+"order.<br>You can change their order by dragging the sort icon."
+
+msgid "options_guide_applySwitchProfileStep"
+msgstr ""
+"When you are done setting the switch profile, don't forget to <b>switch to "
+"it in the popup menu.</b><br/> The icon will show you the <b>final result</"
+"b> profile applied for the current tab. <br/> <b>Hovering</b> on the icon "
+"will reveal a tooltip with details."
+
+msgid "popup_externalProfile"
+msgstr "(Внешний профиль)"
+
+msgid "popup_externalProfileName"
+msgstr "имя профиля"
+
+msgid "popup_proxyNotControllable_app"
+msgstr ""
+"The proxy settings are controlled by other app(s) or extension(s). Please "
+"disable or uninstall the apps or extensions in conflict."
+
+msgid "popup_proxyNotControllable_policy"
+msgstr ""
+"The proxy settings are overruled by policies. Please contact your "
+"administrator."
+
+msgid "popup_proxyNotControllable_unknown"
+msgstr ""
+"The proxy settings cannot be controlled. Please check your system and "
+"browser settings."
+
+msgid "popup_proxyNotControllable_disabled"
+msgstr ""
+"The proxy settings are disabled by explicit request from other app(s) or "
+"extension(s)."
+
+msgid "popup_proxyNotControllable_upgrade"
+msgstr "Proxy settings are now controlled by a newer version of SwitchyOmega."
+
+msgid "popup_proxyNotControllableDetails"
+msgstr ""
+"You cannot switch profiles with SwitchyOmega unless you fix the problem "
+"above."
+
+msgid "popup_proxyNotControllableDetails_upgrade"
+msgstr ""
+"You can't enable two (or more) versions of SwitchyOmega at the same time. "
+"Please disable one of them."
+
+msgid "popup_proxyNotControllableManage"
+msgstr "Управление расширениям"
+
+msgid "popup_addConditionTo"
+msgstr "Добавить условие к"
+
+msgid "popup_addCondition"
+msgstr "Добавить условие"
+
+msgid "popup_showOptions"
+msgstr "Параметры"
+
+msgid "popup_reportIssues"
+msgstr "Сообщить о неполадках"
+
+msgid "popup_errorLog"
+msgstr "Сохранить журнал ошибок"
+
+msgid "popup_requestErrorCount"
+msgstr "$COUNT$ неподгрузившихся ресусов"
+
+msgid "popup_requestErrorHeading"
+msgstr "Ресурсы, что не смогли загрузиться"
+
+msgid "popup_requestErrorWarning"
+msgstr ""
+"A few resources failed to load due to issues with your network, proxy server "
+"or the webpage."
+
+msgid "popup_requestErrorWarningHelp"
+msgstr ""
+"SwitchyOmega is just the reporter of these issues, not the cause of them."
+
+msgid "popup_requestErrorAddCondition"
+msgstr ""
+"You can review the following domains and use proxy for them when appropriate."
+
+msgid "popup_requestErrorCannotAddCondition"
+msgstr ""
+"You can add switch conditions for them only when using a Switch Profile."
+
+msgid "popup_configureMonitorWebRequests"
+msgstr "Настроить монитор сети"
+
+msgid "options_resultProfileForSelectedDomains"
+msgstr "Использовать этот профиль для всех выбранных доменов"
+
+msgid "options_pac_profile_unsupported_moz"
+msgstr "PAC Profiles WILL NOT work in Mozilla Firefox due to technical limitations!"
+
+msgid "popup_issueTemplate"
+msgstr ""
+"\n"
+"\n"
+"\n"
+"<!-- Please write your comment ABOVE this line. -->\n"
+"SwitchyOmega $projectVersion$\n"
+"$userAgent$"
+
+msgid "browserAction_profileDetails_PacProfile"
+msgstr "(Скрипт PAC)"
+
+msgid "browserAction_profileDetails_SystemProfile"
+msgstr "(управляемый другими расширениями или окружением)"
+
+msgid "browserAction_profileDetails_DirectProfile"
+msgstr "(не использовать никаких прокси)"
+
+msgid "browserAction_profileDetails_SwitchProfile"
+msgstr "(переключение по условиям)"
+
+msgid "browserAction_profileDetails_RuleListProfile"
+msgstr "(переключение по списку правил)"
+
+msgid "browserAction_titleNormal"
+msgstr "SwitchyOmega:: $PROFILE$"
+
+msgid "browserAction_titleWithResult"
+msgstr ""
+"SwitchyOmega:: $1:PROFILE$\n"
+"$3:DETAILS$"
+
+msgid "browserAction_titleNewerOptions"
+msgstr ""
+"ERROR: A newer version of SwitchOmega is required to load the stored options."
+
+msgid "browserAction_titleOptionError"
+msgstr ""
+"ОШИБКА: Хранимые параметры повреждены. Нажмине здесь, чтобы СБРОСИТЬ "
+"ПАРАМЕТРЫ."
+
+msgid "browserAction_titleDownloadFail"
+msgstr "Предупреждение: не удалось скачать скрипт PAC и/или список правил."
+
+msgid "browserAction_titleExternalProxy"
+msgstr ""
+"Замечание: в данный момент, настройки прокси управляются другим приложением."
+
+msgid "browserAction_titleInspect"
+msgstr "[Инспектировать] $URL$"
+
+msgid "browserAction_defaultRuleDetails"
+msgstr "(по-умолчанию)"
+
+msgid "browserAction_directResult"
+msgstr "НАПРЯМУЮ"
+
+msgid "browserAction_attachedPrefix"
+msgstr "(RL) "
+
+msgid "browserAction_tempRulePrefix"
+msgstr "(TEMP) "
+
+msgid "contextMenu_inspectPage"
+msgstr "Инспектировать прокси, используемый для этой страницы"
+
+msgid "contextMenu_inspectFrame"
+msgstr "Инспектировать прокси, используемый для этого фрейма"
+
+msgid "contextMenu_inspectLink"
+msgstr "Инспектировать прокси, используемый когда это ссылку откроют"
+
+msgid "contextMenu_inspectElement"
+msgstr "Инспектировать прокси, используемый для этого элементы"
+
+msgid "contextMenu_enableQuickSwitch"
+msgstr "Включить быстрое переключение"
+
+msgid "about_title"
+msgstr "О расширении"
+
+msgid "about_app_description"
+msgstr "Инструмент настрокйи прокси"
+
+msgid "about_version"
+msgstr "Версия $VERSION$"
+
+msgid "about_experimental_warning_moz"
+msgstr "Mozilla Firefox support is highly experimental! If you encounter issues, please report using the buttons below."
+
+msgid "about_disclaimer_networkService"
+msgstr "SwitchyOmega не предоставляет прокси, VPN или другие сетевые сервисы."
+
+msgid "about_disclaimer_privacy"
+msgstr "SwitchyOmega does not track you or insert ads into webpages. Please see"
+" our <a href='https://github.com/FelisCatus/SwitchyOmega/wiki/Privacy#english'>privacy policy</a>."
+
+msgid "about_help"
+msgstr "Other questions? Need help with using SwitchyOmega? Please see our "
+"<a href='https://github.com/FelisCatus/SwitchyOmega/wiki/FAQ'>FAQ</a>."
+
+msgid "about_copyright"
+msgstr "Copyright 2012-2017 <a href='https://github.com/FelisCatus/SwitchyOmega/blob/master/AUTHORS'>The SwitchyOmega Authors</a>. All rights reserved."
+
+msgid "about_credits"
+msgstr "SwitchyOmega is made possible by the <a href='https://github.com/FelisCatus/SwitchyOmega'>SwitchyOmega</a> open source project and other <a href='https://github.com/FelisCatus/SwitchyOmega/blob/master/AUTHORS'>open source software</a>."
+
+msgid "about_license"
+msgstr "SwitchyOmega is <a href='https://www.gnu.org/philosophy/free-sw.en.html'>free software</a> licensed under <a href='https://www.gnu.org/licenses/gpl.html'>GNU General Public License</a> Version 3 or later."

@@ -1,7 +1,11 @@
 angular.module('omega').controller 'MasterCtrl', ($scope, $rootScope, $window,
   $q, $modal, $state, profileColors, profileIcons, omegaTarget,
   $timeout, $location, $filter, getAttachedName, isProfileNameReserved,
-  isProfileNameHidden, dispNameFilter) ->
+  isProfileNameHidden, dispNameFilter, downloadFile) ->
+
+  if browser?.proxy?.register? or browser?.proxy?.registerProxyScript?
+    $scope.isExperimental = true
+    $scope.pacProfilesUnsupported = true
 
   tr = $filter('tr')
 
@@ -10,8 +14,13 @@ angular.module('omega').controller 'MasterCtrl', ($scope, $rootScope, $window,
   omegaTarget.addOptionsChangeCallback (newOptions) ->
     $rootScope.options = angular.copy(newOptions)
     $rootScope.optionsOld = angular.copy(newOptions)
+
+    omegaTarget.state('syncOptions').then (syncOptions) ->
+      $scope.syncOptions = syncOptions
+
     $timeout ->
       $rootScope.optionsDirty = false
+      showFirstRun()
   
   $rootScope.revertOptions = ->
     $window.location.reload()
@@ -37,7 +46,7 @@ angular.module('omega').controller 'MasterCtrl', ($scope, $rootScope, $window,
       pac = OmegaPac.PacGenerator.ascii(pac)
       blob = new Blob [pac], {type: "text/plain;charset=utf-8"}
       fileName = profileName.replace(/\W+/g, '_')
-      saveAs(blob, "OmegaProfile_#{fileName}.pac")
+      downloadFile(blob, "OmegaProfile_#{fileName}.pac")
       if missingProfile
         $timeout ->
           $rootScope.showAlert(
@@ -74,6 +83,7 @@ angular.module('omega').controller 'MasterCtrl', ($scope, $rootScope, $window,
 
   $rootScope.applyOptions = ->
     return unless checkFormValid()
+    return if $rootScope.$broadcast('omegaApplyOptions').defaultPrevented
     plainOptions = angular.fromJson(angular.toJson($rootScope.options))
     patch = diff.diff($rootScope.optionsOld, plainOptions)
     omegaTarget.optionsPatch(patch).then ->
@@ -98,6 +108,13 @@ angular.module('omega').controller 'MasterCtrl', ($scope, $rootScope, $window,
   $rootScope.profileByName = (name) ->
     OmegaPac.Profiles.byName(name, $rootScope.options)
 
+  $rootScope.systemProfile = $rootScope.profileByName('system')
+  $rootScope.externalProfile =
+    color: '#49afcd'
+    name: tr('popup_externalProfile')
+    profileType: 'FixedProfile'
+    fallbackProxy: {host: "127.0.0.1", port: 42, scheme: "http"}
+
   $rootScope.applyOptionsConfirm = ->
     return $q.reject 'form_invalid' unless checkFormValid()
     return $q.when(true) unless $rootScope.optionsDirty
@@ -116,6 +133,7 @@ angular.module('omega').controller 'MasterCtrl', ($scope, $rootScope, $window,
     scope.profileIcons = profileIcons
     scope.dispNameFilter = dispNameFilter
     scope.options = $scope.options
+    scope.pacProfilesUnsupported = $scope.pacProfilesUnsupported
     $modal.open(
       templateUrl: 'partials/new_profile.html'
       scope: scope
@@ -218,7 +236,7 @@ angular.module('omega').controller 'MasterCtrl', ($scope, $rootScope, $window,
           if not profile.builtin
             $scope.updatingProfile[profile.name] = true
         
-      omegaTarget.updateProfile(name).then((results) ->
+      omegaTarget.updateProfile(name, 'bypass_cache').then((results) ->
         success = 0
         error = 0
         for own profileName, result of results
@@ -232,12 +250,24 @@ angular.module('omega').controller 'MasterCtrl', ($scope, $rootScope, $window,
             i18n: 'options_profileDownloadSuccess'
           )
         else
-          $q.reject(results)
+          if error == 1
+            singleErr = results[OmegaPac.Profiles.nameAsKey(name)]
+            if singleErr
+              return $q.reject(singleErr)
+          return $q.reject(results)
       ).catch((err) ->
-        $rootScope.showAlert(
-          type: 'error'
-          i18n: 'options_profileDownloadError'
-        )
+        message = tr('options_profileDownloadError_' + err.name,
+          [err.statusCode ? err.original?.statusCode ? ''])
+        if message
+          $rootScope.showAlert(
+            type: 'error'
+            message: message
+          )
+        else
+          $rootScope.showAlert(
+            type: 'error'
+            i18n: 'options_profileDownloadError'
+          )
       ).finally ->
         if name?
           $scope.updatingProfile[name] = false
@@ -289,22 +319,37 @@ angular.module('omega').controller 'MasterCtrl', ($scope, $rootScope, $window,
   $scope.downloadIntervalI18n = (interval) ->
     "options_downloadInterval_" + (if interval < 0 then "never" else interval)
 
+  $scope.openShortcutConfig = omegaTarget.openShortcutConfig.bind(omegaTarget)
+
+  showFirstRunOnce = true
+  showFirstRun = ->
+    return unless showFirstRunOnce
+    showFirstRunOnce = false
+    omegaTarget.state('firstRun').then (firstRun) ->
+      return unless firstRun
+      omegaTarget.state('firstRun', '')
+
+      profileName = null
+      OmegaPac.Profiles.each $rootScope.options, (key, profile) ->
+        if not profileName and profile.profileType == 'FixedProfile'
+          profileName = profile.name
+      return unless profileName
+
+      scope = $rootScope.$new('isolate')
+      scope.upgrade = (firstRun == 'upgrade')
+      $modal.open(
+        templateUrl: 'partials/options_welcome.html'
+        keyboard: false
+        scope: scope
+        backdrop: 'static'
+        backdropClass: 'opacity-half'
+      ).result.then (r) ->
+        switch r
+          when 'later'
+            return
+          when 'show'
+            $state.go('profile', {name: profileName}).then ->
+              $script 'js/options_guide.js'
+
   omegaTarget.refresh()
 
-  omegaTarget.state('firstRun').then (firstRun) ->
-    return unless firstRun
-    scope = $rootScope.$new('isolate')
-    scope.upgrade = (firstRun == 'upgrade')
-    omegaTarget.state('firstRun', '')
-    $modal.open(
-      templateUrl: 'partials/options_welcome.html'
-      keyboard: false
-      scope: scope
-      backdrop: 'static'
-      backdropClass: 'opacity-half'
-    ).result.then (r) ->
-      switch r
-        when 'later'
-          return
-        when 'show'
-          $script 'js/options_guide.js'
